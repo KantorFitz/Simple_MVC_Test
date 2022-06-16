@@ -1,29 +1,50 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SzkolenieTechniczne.Projekt.Cimena.Infrastructure;
+using SzkolenieTechniczne.Projekt.Cimena.Infrastructure.Repositories;
+using SzkolenieTechniczne.Projekt.Domain.Repository;
 
 namespace SzkolenieTechniczne.Projekt.UI
 {
 	public class Startup
 	{
-		public Startup(IConfiguration configuration)
+		public IConfigurationRoot Configuration { get; }
+		public ILifetimeScope AutofacContainer { get; set; }
+
+		public Startup(IWebHostEnvironment env)
 		{
-			Configuration = configuration;
+			var builder = new ConfigurationBuilder()
+				.AddJsonFile("AppSettings.json", optional: true, reloadOnChange: true)
+				.AddJsonFile($"AppSettings.{env.EnvironmentName}.json", optional: true)
+				.AddEnvironmentVariables();
+
+			Configuration = builder.Build();
 		}
 
-		public IConfiguration Configuration { get; }
+		public void ConfigureContainer(ContainerBuilder containerBuilder)
+		{
+			containerBuilder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerLifetimeScope();
+			containerBuilder.RegisterType<MoviesRepository>().As<IMoviesRepository>().InstancePerLifetimeScope();
+			containerBuilder.ConfigureMediator();
+		}
 
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddControllersWithViews();
+
+			var connectionString = Configuration.GetConnectionString("CinemaTicketDatabase");
+
+			services.AddDbContext<CinemaTicketDbContext>(opt =>
+			{
+				opt.UseSqlServer(connectionString);
+			});
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,12 +61,15 @@ namespace SzkolenieTechniczne.Projekt.UI
 				app.UseHsts();
 			}
 
-			app.UseHttpsRedirection();
 			app.UseStaticFiles();
 
 			app.UseRouting();
 
 			app.UseAuthorization();
+
+			// app.UseHangfireDashboard(); // /hangfire
+
+			AutofacContainer = app.ApplicationServices.GetAutofacRoot();
 
 			app.UseEndpoints(endpoints =>
 			{
