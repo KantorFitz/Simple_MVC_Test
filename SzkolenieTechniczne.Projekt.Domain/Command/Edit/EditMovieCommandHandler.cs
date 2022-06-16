@@ -21,7 +21,7 @@ public class EditMovieCommandHandler : ICommandHandler<EditMovieCommand>
             return Result.Fail(validationresult);
         }
 
-        var movie = _unitOfWork.MoviesRepository.GetById(new Id<Entities.Movie>(command.ID));
+        var movie = _unitOfWork.MoviesRepository.GetById(new Id<Entities.Movie>(command.Id));
         if (movie == null)
         {
             return  Result.Fail("Movie does not exist");

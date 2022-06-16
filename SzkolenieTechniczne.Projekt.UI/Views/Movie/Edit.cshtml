@@ -1,0 +1,33 @@
+﻿@model SzkolenieTechniczne.Projekt.Domain.Command.Edit.EditMovieCommand
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edytuj film</h2>
+
+<form method="post">
+    
+    @Html.HiddenFor(x => x.Id)
+    
+    <div class="form-group">
+        <label asp-for="Name">Nazwa</label>
+        <input asp-for="Name" type="text" class="form-control"/>
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Year">Rok</label>
+        <input asp-for="Year" type="number" class="form-control"/>
+        <span asp-validation-for="Year" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ScenarioTime">Czas trwania</label>
+        <input asp-for="ScenarioTime" type="number" class="form-control"/>
+        <span asp-validation-for="ScenarioTime" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-outline-primary float-right">Zapisz</button>
+
+</form>

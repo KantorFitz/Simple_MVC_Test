@@ -1,0 +1,43 @@
+﻿@model IEnumerable<SzkolenieTechniczne.Projekt.Domain.Query.DTO.MovieDto>
+
+@{
+    ViewData["Title"] = "Filmy";
+}
+
+<h2>Filmy</h2>
+
+@if (Model.Any())
+{
+    <div>
+        <table class="table">
+            <thead class="tab-pane">
+            <tr>
+                <th></th>
+                <th>
+                    <a class="btn btn-outline-success float-right" asp-action="Add">Dodaj nowy</a>
+                </th>
+            </tr>
+            </thead>
+
+            <tbody class="tab-content">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        <div class="d-inline-flex float-right">
+                            @* <a class="text-warning btn btn-link" asp-action="Index" asp-controller="Seances" asp-route="@item.Id.Value"> *@
+                            @*     <i class="fas fa-pen-square">Zobacz seanse</i> *@
+                            @* </a> *@
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+
+
+        </table>
+    </div>
+}
