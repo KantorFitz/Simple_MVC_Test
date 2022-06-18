@@ -10,7 +10,10 @@ public class Ticket
 
     public Ticket(string email, int peopleCount)
     {
-        
+        Id = new Id<Ticket>(Guid.NewGuid());
+        Email = email;
+        PeopleCount = peopleCount;
+        PurchasesDate = DateTime.UtcNow;
     }
 
     public string Email { get; set; }

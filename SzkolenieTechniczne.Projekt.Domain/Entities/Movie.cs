@@ -13,6 +13,7 @@ public class Movie
         Id = new Id<Movie>(Guid.NewGuid());
         Name = name;
         SeanceTime = seanceTime;
+        Year = year;
     }
     
     public Id<Movie> Id { get; protected set; }

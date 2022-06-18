@@ -11,7 +11,9 @@ public class Seance
 
     public Seance(DateTime date, Id<Movie> movieId)
     {
-        
+        Id = new Id<Seance>(Guid.NewGuid());
+        MovieId = movieId;
+        Date = date;
     }
 
     public DateTime Date { get; protected set; }
