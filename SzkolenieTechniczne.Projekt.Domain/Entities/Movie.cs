@@ -22,7 +22,7 @@ public class Movie
     public int SeanceTime { get; protected set; }
     public virtual ICollection<Seance> Seances { get; protected set; }
 
-    public Seance GetSeanceByDateAndRoomId(DateTime date) => Seances.SingleOrDefault(x => x.Date == date);
+    public Seance GetSeanceByDateAndRoomId(DateTime date) => Seances.SingleOrDefault(x => $"{x.Date:dd-MM-yyyy hh:mm}" == $"{date:dd-MM-yyyy hh:mm}");
 
     public void SetName(string name) => Name = name;
 

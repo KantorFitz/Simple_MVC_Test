@@ -1,25 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using SzkolenieTechniczne.Projekt.Domain.Command.Add;
+using SzkolenieTechniczne.Projekt.Domain.Command.Delete;
 using SzkolenieTechniczne.Projekt.Domain.Command.Edit;
-using SzkolenieTechniczne.Projekt.Domain.Entities;
-using SzkolenieTechniczne.Projekt.Domain.Query.DTO;
-using SzkolenieTechniczne.Projekt.Domain.ValueObject;
+using SzkolenieTechniczne.Projekt.Domain.Mediator;
+using SzkolenieTechniczne.Projekt.Domain.Query.GetAllMoviesQuery;
+using SzkolenieTechniczne.Projekt.Domain.Query.GetMovieQuery;
 
 namespace SzkolenieTechniczne.Projekt.UI.Controllers;
 
 public class MovieController : Controller
 {
+	private readonly IMediator _mediator;
+
+	public MovieController(IMediator mediator)
+	{
+		_mediator = mediator;
+	}
+
 	// GET
 	public IActionResult Index()
 	{
-		var movies = new List<MovieDto>()
-		{
-			new("Film 1", new Id<Movie>(Guid.NewGuid())),
-			new("Film 2", new Id<Movie>(Guid.NewGuid())),
-			new("Film 3", new Id<Movie>(Guid.NewGuid())),
-		};
+		var movies = _mediator.Query(new GetAllMovieQuery());
 
 		return View(movies);
 	}
@@ -32,12 +34,26 @@ public class MovieController : Controller
 	[HttpPost]
 	public IActionResult Add(AddMovieCommand command)
 	{
+		var result = _mediator.Command(command);
+		if (result.IsFailure)
+		{
+			ModelState.PopulateValidation(result.Errors);
+			return View(command);
+		}
+		
 		return RedirectToAction("Index");
 	}
 
 	public IActionResult Edit(Guid id)
 	{
-		var model = new EditMovieCommand();
+		var movie = _mediator.Query(new GetMovieQuery(id));
+		var model = new EditMovieCommand
+		{
+			Id = movie.Id,
+			Name = movie.Name,
+			Year = movie.Year,
+			ScenarioTime = movie.SeanceTime
+		};
 
 		return View(model);
 	}
@@ -45,12 +61,19 @@ public class MovieController : Controller
 	[HttpPost]
 	public IActionResult Edit(EditMovieCommand command)
 	{
+		var result = _mediator.Command(command);
+		if (result.IsFailure)
+			return View(command);
+
 		return RedirectToAction("Index");
 	}
 
 	[HttpPost]
 	public IActionResult Delete(Guid id)
 	{
+		var result = _mediator.Command(new DeleteMovieCommand(id));
+		if (result.IsSuccess == false) ViewData["Error"] = result.Message;
+
 		return RedirectToAction("Index");
 	}
 }

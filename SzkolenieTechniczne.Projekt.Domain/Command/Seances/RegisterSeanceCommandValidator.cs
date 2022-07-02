@@ -7,6 +7,6 @@ public class RegisterSeanceCommandValidator : AbstractValidator<RegisterSeanceCo
 	public RegisterSeanceCommandValidator()
 	{
 		RuleFor(x => x.MovieId).NotEmpty();
-		RuleFor(x => x.SeanceDate).NotEmpty().GreaterThan(DateTime.UtcNow);
+		RuleFor(x => x.SeanceDate).NotEmpty().GreaterThan(DateTime.Now);
 	}
 }

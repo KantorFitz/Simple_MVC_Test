@@ -27,16 +27,16 @@ public class Result
             string.Join(", ", violationResult.Errors.Select(x => x.ErrorMessage)),
             violationResult.Errors.Select(x => new Error(x.PropertyName, x.ErrorMessage)));
     }
-}
-
-public class Error
-{
-    public string PropertyName { get; }
-    public string Message { get; }
-
-    public Error(string propertyName, string message)
+    
+    public class Error
     {
-        PropertyName = propertyName;
-        Message = message;
+        public string PropertyName { get; }
+        public string Message { get; }
+
+        public Error(string propertyName, string message)
+        {
+            PropertyName = propertyName;
+            Message = message;
+        }
     }
 }

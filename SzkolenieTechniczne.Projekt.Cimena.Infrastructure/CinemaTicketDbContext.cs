@@ -23,6 +23,7 @@ public class CinemaTicketDbContext : DbContext
     {
         modelBuilder.Entity<Movie>(m =>
         {
+            m.ToTable("Movies");
             m.HasKey(x => x.Id);
             m.Property(e => e.Id).HasConversion(v => v.Value,
                 v => new Id<Movie>(v));
@@ -31,6 +32,7 @@ public class CinemaTicketDbContext : DbContext
 
         modelBuilder.Entity<Seance>(m =>
         {
+            m.ToTable("Seances");
             m.HasKey(x => x.Id);
             m.Property(x => x.Id).HasConversion(x => x.Value, v => new Id<Seance>(v));
             m.Property(x => x.MovieId).HasConversion(x => x.Value, v => new Id<Movie>(v));
@@ -39,6 +41,7 @@ public class CinemaTicketDbContext : DbContext
 
         modelBuilder.Entity<Ticket>(m =>
         {
+            m.ToTable("Tickets");
             m.HasKey(x => x.Id);
             m.Property(x => x.Id).HasConversion(x => x.Value, v => new Id<Ticket>(v));
         });

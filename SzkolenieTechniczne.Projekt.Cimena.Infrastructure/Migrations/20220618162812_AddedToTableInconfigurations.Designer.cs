@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SzkolenieTechniczne.Projekt.Cimena.Infrastructure;
 
@@ -11,9 +12,10 @@ using SzkolenieTechniczne.Projekt.Cimena.Infrastructure;
 namespace SzkolenieTechniczne.Projekt.Cimena.Infrastructure.Migrations
 {
     [DbContext(typeof(CinemaTicketDbContext))]
-    partial class CinemaTicketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220618162812_AddedToTableInconfigurations")]
+    partial class AddedToTableInconfigurations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
